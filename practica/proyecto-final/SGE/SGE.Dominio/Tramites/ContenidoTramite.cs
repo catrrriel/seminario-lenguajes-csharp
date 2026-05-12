@@ -8,7 +8,7 @@ public record class ContenidoTramite
 
     public ContenidoTramite( string valor)
     {
-        if(valor.Equals(""))
+        if(string.IsNullOrEmpty(valor))
             throw new DominioException("El contenido del tramite no puede estar vacio");
         
         Valor = valor;
