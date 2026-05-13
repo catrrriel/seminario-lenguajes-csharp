@@ -1,4 +1,4 @@
-using SGE.Dominio.Comunes;
+using SGE.Dominio.Comun;
 using SGE.Dominio.Tramites;
 
 namespace SGE.Dominio.Expedientes;

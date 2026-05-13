@@ -1,5 +1,4 @@
-using System;
-namespace SGE.Dominio.Comunes;
+namespace SGE.Dominio.Comun;
 
 public class DominioException : Exception
 {

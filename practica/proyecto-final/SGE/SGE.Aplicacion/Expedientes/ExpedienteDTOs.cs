@@ -1,0 +1,1 @@
+namespace SGE.Aplicacion.Expedientes;
