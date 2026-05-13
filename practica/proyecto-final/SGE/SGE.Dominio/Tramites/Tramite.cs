@@ -25,7 +25,7 @@ public class Tramite
         if(idUsuario == Guid.Empty)
             throw new DominioException("El id del usuario no puede estar vacio.");
         if (fechaUltimaModificacion < fechaCreacion)
-            throw new DominioException("La fecha de última modificación no puede ser anterior a la de creación.");
+            throw new DominioException("La fecha de ultima modificacion no puede ser anterior a la de creacion.");
 
         Id = id;
         ExpedienteId = expedienteId;
@@ -39,4 +39,29 @@ public class Tramite
     public static Tramite Reconstruir(Guid id, Guid expedienteId, EtiquetaTramite etiqueta, ContenidoTramite contenido,
                                       DateTime fechaCreacion, DateTime fechaUltimaModificacion, Guid idUsuario)
         => new Tramite(id, expedienteId, etiqueta, contenido, fechaCreacion, fechaUltimaModificacion, idUsuario);
+
+    public void ModificarContenido(ContenidoTramite nuevoContenido, Guid idUsuario)
+    {
+        if (idUsuario == Guid.Empty)
+            throw new DominioException("El id de usuario no puede estar vacio.");
+
+        Contenido = nuevoContenido ?? throw new DominioException("El contenido no puede ser nulo.");
+        UsuarioUltimoCambio = idUsuario;
+        FechaUltimaModificacion = DateTime.Now;
+    }
+
+    public void CambiarEtiqueta(EtiquetaTramite nuevaEtiqueta, Guid idUsuario)
+    {
+        if (idUsuario == Guid.Empty)
+            throw new DominioException("El id de usuario no puede estar vacio.");
+        if (nuevaEtiqueta == Etiqueta)
+            throw new DominioException($"El tramite ya posee la etiqueta {nuevaEtiqueta}.");
+        
+        // if (!Enum.IsDefined(typeof(EtiquetaTramite), nuevaEtiqueta))
+        //     throw new DominioException("La etiqueta indicada no es valida.");
+    
+        Etiqueta = nuevaEtiqueta;
+        UsuarioUltimoCambio = idUsuario;
+        FechaUltimaModificacion = DateTime.Now;
+    }
 }

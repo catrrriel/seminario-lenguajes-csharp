@@ -54,7 +54,7 @@ public class Expediente
         
         // DUDA
         //if (!Enum.IsDefined(typeof(EstadoExpediente), nuevoEstado))
-        //    throw new DominioException("El estado indicado no es válido.");
+        //    throw new DominioException("El estado indicado no es valido.");
 
         Estado = nuevoEstado;
         UsuarioUltimoCambio = idUsuario;
