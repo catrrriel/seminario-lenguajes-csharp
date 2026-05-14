@@ -8,4 +8,6 @@ public interface IExpedienteRepository
     void Modificar(Expediente expediente);
     void Eliminar(Guid id);
     Expediente? ObtenerPorId(Guid id);
+    IEnumerable<Expediente> ObtenerTodos();
+
 }
