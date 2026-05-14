@@ -13,10 +13,10 @@ public class EliminarExpedienteUseCase(IExpedienteRepository expedienteRepositor
     public EliminarExpedienteResponse Ejecutar(EliminarExpedienteRequest request)
     {
         if(!_autorizacion.PoseeElPermiso(request.IdUsuario, Permiso.ExpedienteBaja))
-            throw new AutorizacionException("El usuario no posee permiso para eliminar expedientes");
+            throw new AutorizacionException("El usuario no tiene permiso para eliminar expedientes");
         
         var expediente = _expedienteRepositorio.ObtenerPorId(request.Id)
-            ?? throw new EntidadNoEncontradaException("El expediente no existe en el repositorio");
+            ?? throw new EntidadNoEncontradaException("El expediente a eliminar ya no existe en el repositorio");
 
         var tramites = _tramiteRepositorio.ObtenerPorExpedienteId(request.Id);
         foreach (var tramite in tramites)

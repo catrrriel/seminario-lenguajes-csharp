@@ -54,9 +54,10 @@ public class Tramite
     {
         if (idUsuario == Guid.Empty)
             throw new DominioException("El id de usuario no puede estar vacio.");
-        if (nuevaEtiqueta == Etiqueta)
-            throw new DominioException($"El tramite ya posee la etiqueta {nuevaEtiqueta}.");
         
+        if (nuevaEtiqueta == Etiqueta)
+            return; // no hace falta arrojar excepcion simplemente no hago nada
+
         // if (!Enum.IsDefined(typeof(EtiquetaTramite), nuevaEtiqueta))
         //     throw new DominioException("La etiqueta indicada no es valida.");
     
