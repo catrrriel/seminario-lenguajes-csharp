@@ -4,8 +4,5 @@ namespace SGE.Infraestructura.Autorizacion;
 
 public class AutorizacionProvisionalService : IAutorizacionService
 {
-    public bool PoseeElPermiso(Guid idUsuario, Permiso permiso)
-    {
-        return true;
-    }
+    public bool PoseeElPermiso(Guid idUsuario, Permiso permiso) => true;
 }
