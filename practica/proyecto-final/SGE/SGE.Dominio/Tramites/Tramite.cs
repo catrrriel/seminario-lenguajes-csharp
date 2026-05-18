@@ -58,8 +58,8 @@ public class Tramite
         if (nuevaEtiqueta == Etiqueta)
             return; // no hace falta arrojar excepcion simplemente no hago nada
 
-        // if (!Enum.IsDefined(typeof(EtiquetaTramite), nuevaEtiqueta))
-        //     throw new DominioException("La etiqueta indicada no es valida.");
+        if (!Enum.IsDefined(nuevaEtiqueta))
+            throw new DominioException("La etiqueta indicada no es valida.");
     
         Etiqueta = nuevaEtiqueta;
         UsuarioUltimoCambio = idUsuario;

@@ -12,14 +12,5 @@ public class ListarExpedientesUseCase(IExpedienteRepository repositorio)
             res.Add(new ExpedienteResponse(e.Id, e.Caratula.Valor, e.Estado, e.FechaCreacion, e.FechaUltimaModificacion));
         }
         return res;
-        
-        //podria utilizarse .Select() para simplificar.  e = cada expediente
-        // return _repositorio.ObtenerTodos()
-        // .Select(e => new ExpedienteResponse(
-        //     e.Id,
-        //     e.Caratula.Valor,
-        //     e.Estado,
-        //     e.FechaCreacion,
-        //     e.FechaUltimaModificacion));
     }
 }

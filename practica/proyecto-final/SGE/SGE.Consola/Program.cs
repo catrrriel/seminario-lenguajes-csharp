@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using SGE.Aplicacion.Autorizacion;
+﻿using SGE.Aplicacion.Autorizacion;
 using SGE.Aplicacion.Expedientes;
 using SGE.Aplicacion.Tramites;
 using SGE.Dominio.Comun;
@@ -35,7 +34,7 @@ Guid? tramiteIdUlt = null;
 bool salir = false;
 while (!salir)
 {
-    Console.WriteLine("\n=== SGE - Sistema de Gestion de Expedientes ===");
+    Console.WriteLine("\n====== SGE - Sistema de Gestion de Expedientes ======");
     Console.WriteLine("   1. Agregar expediente");
     Console.WriteLine("   2. Listar expedientes");
     Console.WriteLine("   3. Modificar caratula de expediente");
@@ -46,8 +45,9 @@ while (!salir)
     Console.WriteLine("   8. Modificar tramite");
     Console.WriteLine("   9. Listar tramites por expediente");
     Console.WriteLine("   0. Salir");
+    Console.WriteLine("   99. Forzar error de repositorio");
     if (expedienteIdUlt.HasValue)
-        Console.WriteLine($"\n[Expediente activo: {expedienteIdUlt}]");
+        Console.WriteLine($"\nUltimo expediente activo: [{expedienteIdUlt}]");
     Console.Write("\nOpcion: ");
     var opcion = Console.ReadLine();
 
@@ -57,21 +57,24 @@ while (!salir)
         {
             case "1":
                 Console.Write("Ingrese caratula del expediente a agregar: ");
-                string caratulaExp = Console.ReadLine() ?? "Sin caratula";
+                string caratulaExp = Console.ReadLine()!;
+
                 var reqAgregar = new AgregarExpedienteRequest(caratulaExp, idUsuarioPrueba);
                 var resAgregar = agregarExpedienteUseCase.Ejecutar(reqAgregar);
                 expedienteIdUlt = resAgregar.Id;
+
                 Console.WriteLine($"Expediente agregado. Id: {resAgregar.Id} | Caratula: {resAgregar.Caratula} | Estado: {resAgregar.Estado}");
                 break;
             case "2":
                 Console.WriteLine("------------- Listado de expedientes -------------");
                 var resLista = listarExpedientesUseCase.Ejecutar();
+
                 foreach (var e in resLista)
                 {
                     Console.WriteLine($"Id: {e.Id} | Caratula: {e.Caratula} | Estado: {e.Estado}");
                 }
                 Console.WriteLine("--------------------------------------------------");
-                break;   
+                break;
             case "3":
                 if (!expedienteIdUlt.HasValue)
                 {
@@ -80,7 +83,7 @@ while (!salir)
                 }
                 Console.WriteLine($"Id del expediente activo: [{expedienteIdUlt}]");
                 Console.Write("Ingrese nueva caratula: ");
-                var nuevaCaratula = Console.ReadLine() ?? "Sin caratula";
+                var nuevaCaratula = Console.ReadLine()!;
                 var reqModificar = new ModificarCaratulaExpedienteRequest(expedienteIdUlt.Value, nuevaCaratula, idUsuarioPrueba);
                 var resModificar = modificarCaratulaExpedienteUseCase.Ejecutar(reqModificar);
                 Console.WriteLine("Caratula modificada.");
@@ -91,6 +94,7 @@ while (!salir)
                     Console.WriteLine("Primero crea un expediente (Opcion 1)");
                     break;
                 }
+
                 Console.WriteLine($"\n[Id del expediente activo: {expedienteIdUlt}]");
                 Console.WriteLine("\nIngrese un nuevo estado: ");
                 Console.WriteLine("   1. Recien iniciado");
@@ -100,8 +104,8 @@ while (!salir)
                 Console.WriteLine("   5. Finalizado");
                 Console.Write("  Opcion: ");
 
-                var nuevoEstado = new EstadoExpediente();
-                int opEstado = int.Parse(Console.ReadLine() ?? "1");
+                EstadoExpediente nuevoEstado; 
+                int opEstado = int.Parse(Console.ReadLine()!);
                 nuevoEstado = opEstado switch
                 {
                     1 => EstadoExpediente.RecienIniciado,
@@ -123,6 +127,7 @@ while (!salir)
                     break;
                 }
                 Console.WriteLine($"Id del expediente a eliminar [{expedienteIdUlt}]");
+
                 var reqEliminarExpediente = new EliminarExpedienteRequest(expedienteIdUlt.Value, idUsuarioPrueba);
                 eliminarExpedienteUseCase.Ejecutar(reqEliminarExpediente);
                 Console.WriteLine("Expediente eliminado correctamente.");
@@ -130,43 +135,42 @@ while (!salir)
                 break;
             case "6":
                 if (!expedienteIdUlt.HasValue)
-                    {
-                        Console.WriteLine("Primero crea un expediente (Opcion 1)");
-                        break;
-                    }
-                    Console.WriteLine($"Agregando tramite al expediente: [{expedienteIdUlt}]");
-                    Console.Write("Ingrese contenido del tramite: ");
-                    var contenidoTramite = Console.ReadLine() ?? "Sin contenido";
+                {
+                    Console.WriteLine("Primero crea un expediente (Opcion 1)");
+                    break;  
+                }
+                Console.WriteLine($"Agregando tramite al expediente: [{expedienteIdUlt}]");
+                Console.Write("Ingrese contenido del tramite: ");
+                var contenidoTramite = Console.ReadLine()!;
 
-                    Console.WriteLine("\nSeleccione la etiqueta:");
-                    Console.WriteLine(" 1. Escrito Presentado");
-                    Console.WriteLine(" 2. Pase a Estudio");
-                    Console.WriteLine(" 3. Despacho");
-                    Console.WriteLine(" 4. Resolucion");
-                    Console.WriteLine(" 5. Notificacion");
-                    Console.WriteLine(" 6. Pase al Archivo");
-                    Console.Write(" Opcion: ");
+                Console.WriteLine("\nSeleccione la etiqueta:");
+                Console.WriteLine(" 1. Escrito Presentado");
+                Console.WriteLine(" 2. Pase a Estudio");
+                Console.WriteLine(" 3. Despacho");
+                Console.WriteLine(" 4. Resolucion");
+                Console.WriteLine(" 5. Notificacion");
+                Console.WriteLine(" 6. Pase al Archivo");
+                Console.Write(" Opcion: ");
 
-                    var etiqueta = new EtiquetaTramite();
-                    int opEtiqueta = int.Parse(Console.ReadLine() ?? "1");
-                    etiqueta = opEtiqueta switch
-                    {
-                        1 => EtiquetaTramite.EscritoPresentado,
-                        2 => EtiquetaTramite.PaseAEstudio,
-                        3 => EtiquetaTramite.Despacho,
-                        4 => EtiquetaTramite.Resolucion,
-                        5 => EtiquetaTramite.Notificacion,
-                        6 => EtiquetaTramite.PaseAlArchivo,
-                        _ => EtiquetaTramite.EscritoPresentado
-                    };
+                EtiquetaTramite etiqueta ;
+                int opEtiqueta = int.Parse(Console.ReadLine()!);
+                etiqueta = opEtiqueta switch
+                {
+                    1 => EtiquetaTramite.EscritoPresentado,
+                    2 => EtiquetaTramite.PaseAEstudio,
+                    3 => EtiquetaTramite.Despacho,
+                    4 => EtiquetaTramite.Resolucion,
+                    5 => EtiquetaTramite.Notificacion,
+                    6 => EtiquetaTramite.PaseAlArchivo,
+                    _ => EtiquetaTramite.EscritoPresentado
+                };
 
-                    var reqAgregarTramite = new AgregarTramiteRequest(expedienteIdUlt.Value, etiqueta, contenidoTramite, idUsuarioPrueba);
-                    var resAgregarTramite = agregarTramiteUseCase.Ejecutar(reqAgregarTramite);
+                var reqAgregarTramite = new AgregarTramiteRequest(expedienteIdUlt.Value, etiqueta, contenidoTramite, idUsuarioPrueba);
+                var resAgregarTramite = agregarTramiteUseCase.Ejecutar(reqAgregarTramite);
+                tramiteIdUlt = resAgregarTramite.Id;
 
-                    tramiteIdUlt = resAgregarTramite.Id;
-
-                    Console.WriteLine($"Tramite agregado con Id: [{resAgregarTramite.Id}]");
-                    break;
+                Console.WriteLine($"Tramite agregado con Id: [{resAgregarTramite.Id}]");
+                break;
             case "7":
                 if (!tramiteIdUlt.HasValue)
                 {
@@ -174,6 +178,7 @@ while (!salir)
                     break;
                 }
                 Console.WriteLine($"Id del tramite a eliminar [{tramiteIdUlt}]");
+
                 var reqEliminarTramite = new EliminarTramiteRequest(tramiteIdUlt.Value, idUsuarioPrueba);
                 eliminarTramiteUseCase.Ejecutar(reqEliminarTramite);
 
@@ -189,7 +194,7 @@ while (!salir)
 
                 Console.WriteLine($"Id del trámite activo: [{tramiteIdUlt}]");
                 Console.Write("Ingrese el nuevo contenido del tramite: ");
-                var nuevoContenido = Console.ReadLine() ?? "Sin contenido";
+                var nuevoContenido = Console.ReadLine()!;
 
                 Console.WriteLine("\nSeleccione la nueva etiqueta:");
                 Console.WriteLine(" 1. Escrito Presentado");
@@ -200,8 +205,8 @@ while (!salir)
                 Console.WriteLine(" 6. Pase al Archivo");
                 Console.Write(" Opcion: ");
 
-                var nuevaEtiqueta = new EtiquetaTramite();
-                int opNueEtiqueta = int.Parse(Console.ReadLine() ?? "1");
+                EtiquetaTramite nuevaEtiqueta;
+                int opNueEtiqueta = int.Parse(Console.ReadLine()!);
                 nuevaEtiqueta = opNueEtiqueta switch
                 {
                     1 => EtiquetaTramite.EscritoPresentado,
@@ -220,39 +225,48 @@ while (!salir)
                 break; 
             case "9":
                 if (!expedienteIdUlt.HasValue)
-                    {
-                        Console.WriteLine("Primero crea un expediente (Opcion 1)");
-                        break;
-                    }
-                    Console.WriteLine($"------------- Tramites del Exp: [{expedienteIdUlt}] -------------");
-                    var reqListarTramites = new ListarTramitesPorExpedienteRequest(expedienteIdUlt.Value);
-                    var resListaTramites = listarTramitesPorExpediente.Ejecutar(reqListarTramites);
-
-                    foreach (var t in resListaTramites)
-                    {
-                        Console.WriteLine($"Id: {t.Id} | Etiqueta: {t.Etiqueta} | Contenido: {t.Contenido}");
-                    }
-                    Console.WriteLine("--------------------------------------------------");
-                    break;   
+                {
+                    Console.WriteLine("Primero crea un expediente (Opcion 1)");
+                    break;
+                }
+                Console.WriteLine($"------------- Tramites del Exp: [{expedienteIdUlt}] -------------");
+                
+                var reqListarTramites = new ListarTramitesPorExpedienteRequest(expedienteIdUlt.Value);
+                var resListaTramites = listarTramitesPorExpediente.Ejecutar(reqListarTramites);
+                foreach (var t in resListaTramites)
+                {
+                    Console.WriteLine($"Id: {t.Id} | Etiqueta: {t.Etiqueta} | Contenido: {t.Contenido}");
+                }
+                Console.WriteLine("--------------------------------------------------");
+                break;   
             case "0":
                 salir=true;
+                break;
+            case "99":
+                Console.WriteLine("Forzando error de repositorio...");
+                // atacamos directo al repositorio con un id que no existe
+                expedienteRepositorio.Eliminar(Guid.NewGuid());
                 break;   
             default:
                 Console.WriteLine("Opcion no valida.");
                 break;
         }
     }
-    catch (RepositorioException e)
-    {
-        Console.WriteLine($"[Error de Repositorio]: {e.Message}");         
-    }
     catch (DominioException e)
     {
-        Console.WriteLine($"[Error de Dominio]: {e.Message}");
+        Console.WriteLine($"[Error de negocio]: {e.Message}");
     }
     catch (AutorizacionException e)
     {
         Console.WriteLine($"[Error de permisos]: {e.Message}");
+    }
+    catch (RepositorioException e)
+    {
+        Console.WriteLine($"[Error de datos]: {e.Message}");         
+    }
+    catch(EntidadNoEncontradaException e)
+    {
+        Console.WriteLine($"[Error de aplicacion]: {e.Message}");
     }
     catch (Exception e)
     {
