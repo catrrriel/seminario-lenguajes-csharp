@@ -71,6 +71,7 @@ public class Expediente
             EtiquetaTramite.PaseAEstudio => EstadoExpediente.ParaResolver,
             EtiquetaTramite.Resolucion => EstadoExpediente.ConResolucion,
             EtiquetaTramite.PaseAlArchivo => EstadoExpediente.Finalizado,
+            EtiquetaTramite.Notificacion => EstadoExpediente.EnNotificacion,
             null => EstadoExpediente.RecienIniciado,
             _ => Estado // una etiqueta sin mapeo (Despacho/EscritoPresentado)no cambia el estado
         };
