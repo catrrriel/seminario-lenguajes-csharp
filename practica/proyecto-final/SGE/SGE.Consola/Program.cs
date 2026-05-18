@@ -138,10 +138,29 @@ while (!salir)
                     Console.Write("Ingrese contenido del tramite: ");
                     var contenidoTramite = Console.ReadLine() ?? "Sin contenido";
 
-                    // para simplificar la prueba 
-                    var etiquetaNueva = EtiquetaTramite.PaseAEstudio; 
+                    Console.WriteLine("\nSeleccione la etiqueta:");
+                    Console.WriteLine(" 1. Escrito Presentado");
+                    Console.WriteLine(" 2. Pase a Estudio");
+                    Console.WriteLine(" 3. Despacho");
+                    Console.WriteLine(" 4. Resolucion");
+                    Console.WriteLine(" 5. Notificacion");
+                    Console.WriteLine(" 6. Pase al Archivo");
+                    Console.Write(" Opcion: ");
 
-                    var reqAgregarTramite = new AgregarTramiteRequest(expedienteIdUlt.Value, etiquetaNueva, contenidoTramite, idUsuarioPrueba);
+                    var etiqueta = new EtiquetaTramite();
+                    int opEtiqueta = int.Parse(Console.ReadLine() ?? "1");
+                    etiqueta = opEtiqueta switch
+                    {
+                        1 => EtiquetaTramite.EscritoPresentado,
+                        2 => EtiquetaTramite.PaseAEstudio,
+                        3 => EtiquetaTramite.Despacho,
+                        4 => EtiquetaTramite.Resolucion,
+                        5 => EtiquetaTramite.Notificacion,
+                        6 => EtiquetaTramite.PaseAlArchivo,
+                        _ => EtiquetaTramite.EscritoPresentado
+                    };
+
+                    var reqAgregarTramite = new AgregarTramiteRequest(expedienteIdUlt.Value, etiqueta, contenidoTramite, idUsuarioPrueba);
                     var resAgregarTramite = agregarTramiteUseCase.Ejecutar(reqAgregarTramite);
 
                     tramiteIdUlt = resAgregarTramite.Id;
@@ -182,8 +201,8 @@ while (!salir)
                 Console.Write(" Opcion: ");
 
                 var nuevaEtiqueta = new EtiquetaTramite();
-                int opEtiqueta = int.Parse(Console.ReadLine() ?? "1");
-                nuevaEtiqueta = opEtiqueta switch
+                int opNueEtiqueta = int.Parse(Console.ReadLine() ?? "1");
+                nuevaEtiqueta = opNueEtiqueta switch
                 {
                     1 => EtiquetaTramite.EscritoPresentado,
                     2 => EtiquetaTramite.PaseAEstudio,

@@ -19,7 +19,6 @@ public class EliminarTramiteUseCase(ITramiteRepository repositorio, IAutorizacio
             ?? throw new EntidadNoEncontradaException("El tramite a eliminar ya no existe en el repositorio");
         
         _repositorio.Eliminar(tramite.Id);
-
         _actualizacion.Ejecutar(tramite.ExpedienteId, request.IdUsuario);
 
         return new EliminarTramiteResponse(tramite.Id); // o request.Id ?

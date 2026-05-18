@@ -18,7 +18,8 @@ public class AgregarTramiteUseCase(ITramiteRepository repositorio, IAutorizacion
         var tramite = new Tramite(request.ExpedienteID, request.Etiqueta, contenido, request.IdUsuario);
 
         _repositorio.Agregar(tramite);
-
+        _actualizacionEstado.Ejecutar(tramite.ExpedienteId,request.IdUsuario);
+        
         return new AgregarTramiteResponse(tramite.Id, tramite.Etiqueta, tramite.Contenido.Valor);
     }
 }
