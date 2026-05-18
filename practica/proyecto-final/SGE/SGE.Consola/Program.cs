@@ -30,10 +30,14 @@ var modificarTramiteUseCase = new ModificarTramiteUseCase(tramiteRepositorio, au
 var eliminarTramiteUseCase = new EliminarTramiteUseCase(tramiteRepositorio, autorizacionService, actualizacionService);
 
 Guid idUsuarioPrueba = Guid.NewGuid ();
+Guid? expedienteIdUlt = null;
+Guid? tramiteIdUlt = null;
 bool salir = false;
 while (!salir)
 {
     Console.WriteLine("\n=== SGE - Sistema de Gestion de Expedientes ===");
+    if (expedienteIdUlt.HasValue)
+        Console.WriteLine($"[Expediente activo: {expedienteIdUlt}]");
     Console.WriteLine("   1. Agregar expediente");
     Console.WriteLine("   2. Listar expedientes");
     Console.WriteLine("   3. Modificar caratula de expediente");
@@ -52,9 +56,11 @@ while (!salir)
         switch (opcion)
         {
             case "1":
-                Console.WriteLine("Agregando expediente");
-                var reqAgregar = new AgregarExpedienteRequest($"Expediente 001", idUsuarioPrueba);
+                Console.Write("Ingrese caratula del expediente a agregar: ");
+                var caratulaExp = Console.ReadLine();
+                var reqAgregar = new AgregarExpedienteRequest(caratulaExp, idUsuarioPrueba);
                 var resAgregar = agregarExpedienteUseCase.Ejecutar(reqAgregar);
+                expedienteIdUlt = resAgregar.Id;
                 Console.WriteLine($"Expediente agregado. Id: {resAgregar.Id} | Caratula: {resAgregar.Caratula} | Estado: {resAgregar.Estado}");
                 break;   
             case "2":
@@ -67,26 +73,71 @@ while (!salir)
                 Console.WriteLine("--------------------------------------------------");
                 break;   
             case "3":
-                Console.WriteLine("Modificando Caratula");
-                var expedienteId = Guid.Parse("cd5d2a83-ce75-4a6d-b9da-858a7cb5f67d");
-                var nuevaCaratula = "Expediente 002";
-                var reqModificar = new ModificarCaratulaExpedienteRequest(expedienteId, nuevaCaratula, idUsuarioPrueba);
+                if (!expedienteIdUlt.HasValue)
+                {
+                    Console.WriteLine("Primero crea un expediente (Opcion 1)");
+                    break;
+                }
+                Console.WriteLine($"[Id del expediente activo: {expedienteIdUlt}]");
+                Console.Write("Ingrese nueva caratula: ");
+                var nuevaCaratula = Console.ReadLine()!;
+                var reqModificar = new ModificarCaratulaExpedienteRequest(expedienteIdUlt.Value, nuevaCaratula, idUsuarioPrueba);
                 var resModificar = modificarCaratulaExpedienteUseCase.Ejecutar(reqModificar);
                 Console.WriteLine("Caratula modificada.");
-                break;   
+                break;
             case "4":
-                Console.WriteLine("Cambiando estado.");
-                expedienteId = Guid.Parse("cd5d2a83-ce75-4a6d-b9da-858a7cb5f67d");
-                var nuevoEstado = EstadoExpediente.ParaResolver;
-                var reqCambiarEstado = new CambiarEstadoExpedienteRequest(expedienteId, nuevoEstado, idUsuarioPrueba);
+                if (!expedienteIdUlt.HasValue)
+                {
+                    Console.WriteLine("Primero crea un expediente (Opcion 1)");
+                    break;
+                }
+                Console.WriteLine($"[Id del expediente activo: {expedienteIdUlt}]");
+                Console.WriteLine("\nIngrese un nuevo estado: ");
+                Console.WriteLine("   1. Recien iniciado");
+                Console.WriteLine("   2. Para resolver");
+                Console.WriteLine("   3. Con resolucion");
+                Console.WriteLine("   4. En notificacion");
+                Console.WriteLine("   5. Finalizado");
+                Console.Write("   Opcion: ");
+                var nuevoEstado = new EstadoExpediente();
+                var op = int.Parse(Console.ReadLine()!);
+                switch (op)
+                {
+                    case 1:
+                        nuevoEstado = EstadoExpediente.RecienIniciado;
+                        break;
+                    case 2:
+                        nuevoEstado = EstadoExpediente.ParaResolver;
+                        break;
+                    case 3:
+                        nuevoEstado = EstadoExpediente.ConResolucion;
+                        break;
+                    case 5:
+                        nuevoEstado = EstadoExpediente.EnNotificacion;
+                        break;
+                    case 6:
+                        nuevoEstado = EstadoExpediente.Finalizado;
+                        break;
+                    default:
+                        Console.WriteLine("Estado no valido.");
+                        break;
+                }
+                if(op > 5 && op < 0)
+                    nuevoEstado = EstadoExpediente.RecienIniciado;
+                var reqCambiarEstado = new CambiarEstadoExpedienteRequest(expedienteIdUlt.Value, nuevoEstado, idUsuarioPrueba);
                 var resCambiarEstado = cambiarEstadoExpedienteUseCase.Ejecutar(reqCambiarEstado);
                 Console.WriteLine("Estado modificado.");
                 break;   
             case "5":
-                Console.WriteLine("Intentando borrar expediente");
-
-                //var reqEliminar = new EliminarExpedienteRequest();
-
+                if (!expedienteIdUlt.HasValue)
+                {
+                    Console.WriteLine("Primero crea un expediente (Opcion 1)");
+                    break;
+                }
+                Console.Write($"Id del expediente a eliminar [{expedienteIdUlt}]: ");
+                eliminarExpedienteUseCase.Ejecutar(new EliminarExpedienteRequest(expedienteIdUlt.Value, idUsuarioPrueba));
+                Console.WriteLine("Expediente eliminado correctamente.");
+                expedienteIdUlt = null;
                 break;
             case "6":
 
