@@ -50,11 +50,11 @@ public class Expediente
         if(idUsuario == Guid.Empty)
             throw new DominioException("El id de usuario no puede estar vacio.");
         if(nuevoEstado == Estado)
-            throw new DominioException($"El estado del expediente ya se encuentra en {nuevoEstado}");
+            return;
         
         // DUDA
-        //if (!Enum.IsDefined(typeof(EstadoExpediente), nuevoEstado))
-        //    throw new DominioException("El estado indicado no es valido.");
+        if (!Enum.IsDefined(typeof(EstadoExpediente), nuevoEstado))
+            throw new DominioException("El estado indicado no es valido.");
 
         Estado = nuevoEstado;
         UsuarioUltimoCambio = idUsuario;

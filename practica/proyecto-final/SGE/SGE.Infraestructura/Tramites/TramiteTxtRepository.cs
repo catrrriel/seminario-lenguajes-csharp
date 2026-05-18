@@ -1,5 +1,4 @@
 using SGE.Aplicacion.Tramites;
-using SGE.Dominio.Expedientes;
 using SGE.Dominio.Tramites;
 using SGE.Infraestructura.Comun;
 

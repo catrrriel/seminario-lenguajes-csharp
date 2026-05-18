@@ -3,17 +3,10 @@ using SGE.Dominio.Expedientes;
 
 namespace SGE.Aplicacion.Expedientes;
 
-public class AgregarExpedienteUseCase
+public class AgregarExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion)
 {
-    private readonly IExpedienteRepository _repositorio;
-    private readonly IAutorizacionService _autorizacion;
-    
-    // por inyeccion de dependencias
-    public AgregarExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion)
-    {
-        _repositorio = repositorio;
-        _autorizacion = autorizacion;
-    }
+    private readonly IExpedienteRepository _repositorio = repositorio;
+    private readonly IAutorizacionService _autorizacion = autorizacion;
 
     public AgregarExpedienteResponse Ejecutar(AgregarExpedienteRequest request)
     {
