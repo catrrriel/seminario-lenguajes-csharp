@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\EscuelaApi.Dominio\EscuelaApi.Dominio.csproj" />
+    <ProjectReference Include="..\EscuelaApi.Aplicacion\EscuelaApi.Aplicacion.csproj" />
+    <ProjectReference Include="..\EscuelaApi.Infraestructura\EscuelaApi.Infraestructura.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Hosting.Aplicacion/Hosting.Aplicacion.csproj" />
+  <Project Path="Hosting.ConsolaHost/Hosting.ConsolaHost.csproj" />
+</Solution>
