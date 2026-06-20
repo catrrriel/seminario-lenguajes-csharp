@@ -1,12 +1,15 @@
+using SGE.Aplicacion.Abstracciones;
 using SGE.Aplicacion.Autorizacion;
+using SGE.Dominio.Autorizacion;
 using SGE.Dominio.Comun;
 
 namespace SGE.Aplicacion.Expedientes;
 
-public class CambiarEstadoExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion)
+public class CambiarEstadoExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion, IUnidadDeTrabajo unidadDeTrabajo)
 {
     private readonly IExpedienteRepository _repositorio = repositorio;
     private readonly IAutorizacionService _autorizacion = autorizacion;
+    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public CambiarEstadoExpedienteResponse Ejecutar(CambiarEstadoExpedienteRequest request)
     {
@@ -19,7 +22,7 @@ public class CambiarEstadoExpedienteUseCase(IExpedienteRepository repositorio, I
         expediente.CambiarEstado(request.NuevoEstado, request.IdUsuario);
 
         _repositorio.Modificar(expediente);
-
+        _unidadDeTrabajo.GuardarCambios();
         return new CambiarEstadoExpedienteResponse(expediente.Id, expediente.Estado);
     }
 }

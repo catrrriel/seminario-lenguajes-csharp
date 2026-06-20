@@ -1,14 +1,17 @@
+using SGE.Aplicacion.Abstracciones;
 using SGE.Aplicacion.Autorizacion;
 using SGE.Aplicacion.Tramites;
+using SGE.Dominio.Autorizacion;
 using SGE.Dominio.Comun;
 
 namespace SGE.Aplicacion.Expedientes;
 
-public class EliminarExpedienteUseCase(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio, IAutorizacionService autorizacion)
+public class EliminarExpedienteUseCase(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio, IAutorizacionService autorizacion, IUnidadDeTrabajo unidadDeTrabajo)
 {
     private readonly IExpedienteRepository _expedienteRepositorio = expedienteRepositorio;
     private readonly ITramiteRepository _tramiteRepositorio = tramiteRepositorio;
     private readonly IAutorizacionService _autorizacion = autorizacion;
+    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public EliminarExpedienteResponse Ejecutar(EliminarExpedienteRequest request)
     {
@@ -25,7 +28,7 @@ public class EliminarExpedienteUseCase(IExpedienteRepository expedienteRepositor
         }
 
         _expedienteRepositorio.Eliminar(expediente.Id);
-
+        _unidadDeTrabajo.GuardarCambios();
         return new EliminarExpedienteResponse(expediente.Id);
     }
 

@@ -1,13 +1,16 @@
+using SGE.Aplicacion.Abstracciones;
 using SGE.Aplicacion.Autorizacion;
+using SGE.Dominio.Autorizacion;
 using SGE.Dominio.Comun;
 using SGE.Dominio.Expedientes;
 
 namespace SGE.Aplicacion.Expedientes;
 
-public class ModificarCaratulaExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion)
+public class ModificarCaratulaExpedienteUseCase(IExpedienteRepository repositorio, IAutorizacionService autorizacion, IUnidadDeTrabajo unidadDeTrabajo)
 {
     private readonly IExpedienteRepository _repositorio = repositorio;
     private readonly IAutorizacionService _autorizacion = autorizacion;
+    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public ModificarCaratulaExpedienteResponse Ejecutar(ModificarCaratulaExpedienteRequest request)
     {
@@ -21,7 +24,7 @@ public class ModificarCaratulaExpedienteUseCase(IExpedienteRepository repositori
         expediente.ModificarCaratula(nuevaCaratula, request.IdUsuario);
 
         _repositorio.Modificar(expediente);
-
+        _unidadDeTrabajo.GuardarCambios();
         return new ModificarCaratulaExpedienteResponse(expediente.Id, expediente.Caratula.Valor);
     }
 }

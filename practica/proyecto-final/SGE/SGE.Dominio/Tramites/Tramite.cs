@@ -2,9 +2,9 @@ using SGE.Dominio.Comun;
 
 namespace SGE.Dominio.Tramites;
 
-public class Tramite
+public class Tramite : Entidad
 {
-    public Guid Id { get; private set; }
+    // public Guid Id { get; private set; }
     public Guid ExpedienteId { get; private set; }
     public EtiquetaTramite Etiqueta { get; private set; }
     public ContenidoTramite Contenido { get; private set; }

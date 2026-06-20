@@ -1,13 +1,15 @@
+using SGE.Aplicacion.Abstracciones;
 using SGE.Aplicacion.Expedientes;
 using SGE.Dominio.Comun;
 using SGE.Dominio.Tramites;
 
 namespace SGE.Aplicacion.Tramites;
 
-public class ActualizacionEstadoExpedienteService(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio)
+public class ActualizacionEstadoExpedienteService(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio, IUnidadDeTrabajo unidadDeTrabajo)
 {
     private readonly IExpedienteRepository _expedienteRepositorio = expedienteRepositorio;
     private readonly ITramiteRepository _tramiteRepositorio = tramiteRepositorio;
+    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public void Ejecutar (Guid expedienteId, Guid idUsuario)
     {

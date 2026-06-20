@@ -2,9 +2,9 @@ using SGE.Dominio.Comun;
 using SGE.Dominio.Tramites;
 
 namespace SGE.Dominio.Expedientes;
-public class Expediente
+public class Expediente : Entidad
 {
-    public Guid Id { get; private set; }
+    // public Guid Id { get; private set; }
     public CaratulaExpediente Caratula { get; private set; }
     public DateTime FechaCreacion { get; private set; }
     public DateTime FechaUltimaModificacion { get; private set; }

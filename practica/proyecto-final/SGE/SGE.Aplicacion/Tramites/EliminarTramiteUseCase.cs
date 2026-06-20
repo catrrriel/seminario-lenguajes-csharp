@@ -1,14 +1,17 @@
 using System.Net;
+using SGE.Aplicacion.Abstracciones;
 using SGE.Aplicacion.Autorizacion;
+using SGE.Dominio.Autorizacion;
 using SGE.Dominio.Comun;
 
 namespace SGE.Aplicacion.Tramites;
 
-public class EliminarTramiteUseCase(ITramiteRepository repositorio, IAutorizacionService autorizacion, ActualizacionEstadoExpedienteService actualizacion)
+public class EliminarTramiteUseCase(ITramiteRepository repositorio, IAutorizacionService autorizacion, ActualizacionEstadoExpedienteService actualizacion, IUnidadDeTrabajo unidadDeTrabajo)
 {
     private readonly ITramiteRepository _repositorio = repositorio;
     private readonly IAutorizacionService _autorizacion = autorizacion;
     private readonly ActualizacionEstadoExpedienteService _actualizacion = actualizacion;
+    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public EliminarTramiteResponse Ejecutar(EliminarTramiteRequest request)
     {
@@ -20,7 +23,7 @@ public class EliminarTramiteUseCase(ITramiteRepository repositorio, IAutorizacio
         
         _repositorio.Eliminar(tramite.Id);
         _actualizacion.Ejecutar(tramite.ExpedienteId, request.IdUsuario);
-
+        _unidadDeTrabajo.GuardarCambios();
         return new EliminarTramiteResponse(tramite.Id); // o request.Id ?
     }
 }
