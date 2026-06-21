@@ -20,7 +20,7 @@ public record class DireccionEmail
     // Constructor vacío para EF Core (Leaking Concern)
     protected DireccionEmail() { }
 
-        // Método de fábrica para instanciar a partir de un string completo
+        // Método de fábrica para instanciar a partir de un string completo 
     public static DireccionEmail Parse(string emailCompleto)
     {
         if (string.IsNullOrWhiteSpace(emailCompleto) || !emailCompleto.Contains('@'))
