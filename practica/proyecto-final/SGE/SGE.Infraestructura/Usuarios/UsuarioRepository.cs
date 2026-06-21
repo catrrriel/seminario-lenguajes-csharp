@@ -10,9 +10,9 @@ public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     // obtener automaticamente los metodos basicos
     public UsuarioRepository(SgeContext context) : base(context) {}
 
-    public Usuario? ObtenerPorEmail(string correoElectronico)
+    public Usuario? ObtenerPorEmail(DireccionEmail email)
     {
-        return _context.Set<Usuario>().SingleOrDefault(u => u.CorreoElectronico == correoElectronico);
+        return _context.Set<Usuario>().SingleOrDefault(u => u.Email == email);
     }
 
     public IEnumerable<Usuario> ObtenerTodos()

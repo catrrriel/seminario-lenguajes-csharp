@@ -4,7 +4,6 @@ namespace SGE.Dominio.Tramites;
 
 public class Tramite : Entidad
 {
-    // public Guid Id { get; private set; }
     public Guid ExpedienteId { get; private set; }
     public EtiquetaTramite Etiqueta { get; private set; }
     public ContenidoTramite Contenido { get; private set; }
@@ -13,32 +12,22 @@ public class Tramite : Entidad
     public Guid UsuarioUltimoCambio { get; private set; }
 
     public Tramite(Guid expedienteId, EtiquetaTramite etiqueta, ContenidoTramite contenido, Guid idUsuario)
-        :this(Guid.NewGuid(), expedienteId, etiqueta, contenido, DateTime.Now, DateTime.Now, idUsuario)
-    {        
-    }
-
-    private Tramite(Guid id, Guid expedienteId, EtiquetaTramite etiqueta, ContenidoTramite contenido, 
-                    DateTime fechaCreacion, DateTime fechaUltimaModificacion, Guid idUsuario)
     {
         if(expedienteId == Guid.Empty)
             throw new DominioException("El id del expediente no puede estar vacio.");
-        if(idUsuario == Guid.Empty)
-            throw new DominioException("El id del usuario no puede estar vacio.");
-        if (fechaUltimaModificacion < fechaCreacion)
-            throw new DominioException("La fecha de ultima modificacion no puede ser anterior a la de creacion.");
-
-        Id = id;
+        Id = Guid.NewGuid();
         ExpedienteId = expedienteId;
         Etiqueta = etiqueta;
+        FechaCreacion = DateTime.Now;
+        FechaUltimaModificacion = DateTime.Now;
         Contenido = contenido ?? throw new DominioException("El contenido no puede ser nulo.");
-        FechaCreacion = fechaCreacion;
-        FechaUltimaModificacion = fechaUltimaModificacion;
         UsuarioUltimoCambio = idUsuario;
     }
 
-    public static Tramite Reconstruir(Guid id, Guid expedienteId, EtiquetaTramite etiqueta, ContenidoTramite contenido,
-                                      DateTime fechaCreacion, DateTime fechaUltimaModificacion, Guid idUsuario)
-        => new Tramite(id, expedienteId, etiqueta, contenido, fechaCreacion, fechaUltimaModificacion, idUsuario);
+    protected Tramite()
+    {
+        Contenido = null!;
+    }
 
     public void ModificarContenido(ContenidoTramite nuevoContenido, Guid idUsuario)
     {

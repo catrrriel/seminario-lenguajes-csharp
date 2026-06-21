@@ -4,6 +4,6 @@ using SGE.Dominio.Usuarios;
 namespace SGE.Aplicacion.Usuarios;
 public interface IUsuarioRepository : IRepository<Usuario>
 {
-    Usuario? ObtenerPorEmail(string correoElectronico);
+    Usuario? ObtenerPorEmail(DireccionEmail email);
     IEnumerable<Usuario> ObtenerTodos();
 }

@@ -19,5 +19,6 @@ public class SgeContext : DbContext
         
         modelBuilder.Entity<Expediente>().ComplexProperty(e => e.Caratula);
         modelBuilder.Entity<Tramite>().ComplexProperty(t => t.Contenido);
+        modelBuilder.Entity<Usuario>().ComplexProperty(u => u.Email);
     }
 }

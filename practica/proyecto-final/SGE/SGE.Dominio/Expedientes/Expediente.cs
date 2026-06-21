@@ -4,7 +4,6 @@ using SGE.Dominio.Tramites;
 namespace SGE.Dominio.Expedientes;
 public class Expediente : Entidad
 {
-    // public Guid Id { get; private set; }
     public CaratulaExpediente Caratula { get; private set; }
     public DateTime FechaCreacion { get; private set; }
     public DateTime FechaUltimaModificacion { get; private set; }
@@ -12,29 +11,22 @@ public class Expediente : Entidad
     public EstadoExpediente Estado{ get; private set; }
 
     public Expediente(CaratulaExpediente caratula, Guid idUsuario)
-        :this(Guid.NewGuid(), caratula, DateTime.Now, DateTime.Now, idUsuario, EstadoExpediente.RecienIniciado)
-    {
-    }
-    
-    private Expediente(Guid id, CaratulaExpediente caratula, DateTime fechaCreacion,
-                       DateTime fechaUltimaModificacion, Guid idUsuario, EstadoExpediente estado)
     {
         if(idUsuario == Guid.Empty)
             throw new DominioException("El id de usuario no puede estar vacio.");
-        if(fechaUltimaModificacion < fechaCreacion)
-            throw new DominioException("La fecha de la ultima modificacion no puede ser anterior a la de creacion.");
-        
-        Id = id;
+    
+        Id = Guid.NewGuid();
         Caratula = caratula ?? throw new DominioException("La caratula no puede ser nula.");
-        FechaCreacion = fechaCreacion;
-        FechaUltimaModificacion = fechaUltimaModificacion;
         UsuarioUltimoCambio = idUsuario;
-        Estado = estado;
+        FechaCreacion = DateTime.Now;
+        FechaUltimaModificacion = DateTime.Now;
+        Estado = EstadoExpediente.RecienIniciado;
     }
 
-    public static Expediente Reconstruir(Guid id, CaratulaExpediente caratula, DateTime fechaCreacion,
-                                         DateTime fechaUltimaModificacion, Guid idUsuario, EstadoExpediente estado)
-        => new Expediente(id, caratula, fechaCreacion, fechaUltimaModificacion, idUsuario, estado);
+    protected Expediente()
+    {
+        Caratula = null!; // Para decirle que caratula no va a ser null, EF Core llena el dato por reflexion
+    }
 
     public void ModificarCaratula(CaratulaExpediente nuevaCaratula, Guid idUsuario)
     {

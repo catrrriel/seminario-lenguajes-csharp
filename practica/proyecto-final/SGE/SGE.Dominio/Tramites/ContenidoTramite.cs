@@ -4,7 +4,7 @@ namespace SGE.Dominio.Tramites;
 
 public record class ContenidoTramite
 {
-    public string Valor{ get;}
+    public string Valor{ get; private init;} = "";
 
     public ContenidoTramite( string valor)
     {
@@ -14,5 +14,7 @@ public record class ContenidoTramite
         Valor = valor;
     }
 
+    protected ContenidoTramite() { }
+    
     public override string ToString() => Valor;
 }

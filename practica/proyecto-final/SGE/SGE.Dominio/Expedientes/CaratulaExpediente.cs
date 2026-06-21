@@ -4,7 +4,7 @@ namespace SGE.Dominio.Expedientes;
 
 public record class CaratulaExpediente
 {
-    public string Valor{ get;}
+    public string Valor{ get; private init;} = "";
 
     public CaratulaExpediente( string valor)
     {
@@ -13,6 +13,8 @@ public record class CaratulaExpediente
         
         Valor = valor;
     }
+
+    protected CaratulaExpediente() { }
 
     public override string ToString() => Valor;
 }

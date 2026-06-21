@@ -6,9 +6,9 @@ namespace SGE.Dominio.Usuarios;
 public class Usuario : Entidad
 {
     // public Guid Id { get; private set; }
-    public string Nombre { get; private set; }
-    public string CorreoElectronico { get; private set; }
-    public string ContrasenaHash { get; private set; }
+    public string Nombre { get; private set; } = "";
+    public DireccionEmail? Email { get; private set; }
+    public string ContrasenaHash { get; private set; } = "";
     public bool EsAdministrador { get; private set; }
     private List<Permiso> _permisos = new List<Permiso>();
     public IReadOnlyCollection<Permiso> Permisos => _permisos.AsReadOnly();
@@ -16,21 +16,18 @@ public class Usuario : Entidad
     // Constructor vacio para EF core
     protected Usuario() { }
 
-    public Usuario(string nombre, string correoElectronico, string contraseñaPlana)
+    public Usuario(string nombre, DireccionEmail email, string contraseñaPlana, bool esAdministrador = false)
     {
         if (string.IsNullOrWhiteSpace(nombre))
             throw new DominioException("El nombre es obligatorio.");
-
-        if (string.IsNullOrWhiteSpace(correoElectronico))
-            throw new DominioException("El correo electronico es obligatorio.");
-
+    
         if (string.IsNullOrWhiteSpace(contraseñaPlana))
             throw new DominioException("La contraseña es obligatoria.");
 
         Id = Guid.NewGuid();
         Nombre = nombre;
-        CorreoElectronico = correoElectronico;
-        EsAdministrador = false;
+        Email = email ?? throw new DominioException("La direccion email es obligatoria.");
+        EsAdministrador = esAdministrador;
         SetContraseña(contraseñaPlana);
     }
 
@@ -59,17 +56,14 @@ public class Usuario : Entidad
         _permisos.Remove(permiso);
     }
 
-    // Metodo para que el usuario pueda modificar sus datos basicos
-    public void ModificarDatos(string nombre, string correoElectronico)
+    // Metodo para que el usuario pueda modificar sus datos basicos  <= DUDA
+    public void ModificarDatos(string nombre, DireccionEmail email)
     {
         if (string.IsNullOrWhiteSpace(nombre))
-            throw new DominioException("El nombre es obligatorio.");
-
-        if (string.IsNullOrWhiteSpace(correoElectronico))
-            throw new DominioException("El correo electronico es obligatorio.");
-
+            throw new DominioException("Ingresar el nombre es obligatorio para modificar.");
+        
         Nombre = nombre;
-        CorreoElectronico = correoElectronico;
+        Email = email ?? throw new DominioException("Ingresar el correo electronico es obligatorio para modificar.");
     }
     
 }
