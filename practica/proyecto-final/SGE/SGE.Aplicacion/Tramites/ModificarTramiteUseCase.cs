@@ -24,7 +24,6 @@ public class ModificarTramiteUseCase(ITramiteRepository repositorio, IAutorizaci
         tramite.ModificarContenido(nuevoContenido, request.IdUsuario);
         tramite.CambiarEtiqueta(request.NuevaEtiqueta, request.IdUsuario);
 
-        _repositorio.Modificar(tramite);
         _actualizacionEstado.Ejecutar(tramite.ExpedienteId, request.IdUsuario);
         _unidadDeTrabajo.GuardarCambios();
         return new ModificarTramiteResponse(tramite.Id, tramite.Etiqueta, tramite.Contenido.Valor);

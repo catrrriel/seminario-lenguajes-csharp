@@ -23,7 +23,6 @@ public class ModificarCaratulaExpedienteUseCase(IExpedienteRepository repositori
         var nuevaCaratula = new CaratulaExpediente(request.NuevaCaratula);
         expediente.ModificarCaratula(nuevaCaratula, request.IdUsuario);
 
-        _repositorio.Modificar(expediente);
         _unidadDeTrabajo.GuardarCambios();
         return new ModificarCaratulaExpedienteResponse(expediente.Id, expediente.Caratula.Valor);
     }

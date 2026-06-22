@@ -21,13 +21,6 @@ public class Repository<T> : IRepository<T> where T : Entidad
         _context.Set<T>().Add(entidad);
     }
 
-    public void Modificar(T entidad)
-    {
-        if(entidad == null)
-            throw new ArgumentNullException(nameof(entidad),"La entidad no puede ser nula.");   
-        _context.Set<T>().Update(entidad);
-    }
-
     public void Eliminar(Guid id)
     {
         T? entidad = _context.Set<T>().Find(id) ?? 
@@ -38,7 +31,7 @@ public class Repository<T> : IRepository<T> where T : Entidad
     public T? ObtenerPorId(Guid id)
     {
         if (id == Guid.Empty)
-            throw new ArgumentException("El ID no puede ser vacío", nameof(id));
+            throw new ArgumentException("El ID no puede ser vacio", nameof(id));
 
         return _context.Set<T>().Find(id);
     }

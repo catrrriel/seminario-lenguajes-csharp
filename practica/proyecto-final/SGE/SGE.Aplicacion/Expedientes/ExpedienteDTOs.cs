@@ -19,5 +19,5 @@ public record class CambiarEstadoExpedienteRequest(Guid Id, EstadoExpediente Nue
 public record class CambiarEstadoExpedienteResponse(Guid Id, EstadoExpediente Estado);
 
 // LISTAR
-public record class ListarExpedientesRequest(Guid IdUsuario);   // necesita request? idUsuario para chequeo minimo ¿?
+public record class ListarExpedientesRequest();   // DTO vacio
 public record class ExpedienteResponse(Guid Id, string Caratula, EstadoExpediente Estado, DateTime FechaCreacion, DateTime FechaUltimaModificacion);

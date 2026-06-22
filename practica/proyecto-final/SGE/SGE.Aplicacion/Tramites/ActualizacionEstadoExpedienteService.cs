@@ -5,11 +5,10 @@ using SGE.Dominio.Tramites;
 
 namespace SGE.Aplicacion.Tramites;
 
-public class ActualizacionEstadoExpedienteService(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio, IUnidadDeTrabajo unidadDeTrabajo)
+public class ActualizacionEstadoExpedienteService(IExpedienteRepository expedienteRepositorio, ITramiteRepository tramiteRepositorio)
 {
     private readonly IExpedienteRepository _expedienteRepositorio = expedienteRepositorio;
     private readonly ITramiteRepository _tramiteRepositorio = tramiteRepositorio;
-    private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
     public void Ejecutar (Guid expedienteId, Guid idUsuario)
     {
@@ -29,7 +28,6 @@ public class ActualizacionEstadoExpedienteService(IExpedienteRepository expedien
             }
         }
 
-        bool cambio = expediente.ActualizarEstado(ultimaEtiqueta, idUsuario);
-        if(cambio) _expedienteRepositorio.Modificar(expediente);
+        expediente.ActualizarEstado(ultimaEtiqueta, idUsuario);
     }
 }

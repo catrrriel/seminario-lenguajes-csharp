@@ -21,7 +21,6 @@ public class CambiarEstadoExpedienteUseCase(IExpedienteRepository repositorio, I
         
         expediente.CambiarEstado(request.NuevoEstado, request.IdUsuario);
 
-        _repositorio.Modificar(expediente);
         _unidadDeTrabajo.GuardarCambios();
         return new CambiarEstadoExpedienteResponse(expediente.Id, expediente.Estado);
     }

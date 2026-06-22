@@ -4,7 +4,7 @@ public class ListarExpedientesUseCase(IExpedienteRepository repositorio)
 {
     private readonly IExpedienteRepository _repositorio = repositorio;
 
-    public IEnumerable<ExpedienteResponse> Ejecutar()
+    public IEnumerable<ExpedienteResponse> Ejecutar(ListarExpedientesRequest request)
     {
         var res = new List<ExpedienteResponse>();
         foreach (var e in _repositorio.ObtenerTodos())
