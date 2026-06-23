@@ -10,7 +10,7 @@ var options = new DbContextOptionsBuilder<SgeContext>()
 using var context = new SgeContext(options);
 
 // Llamamos al inicializador
-SgeSqlite.Inicializar(context);
+// SgeSqlite.Inicializar(context);
 
 Console.WriteLine("Base de datos SGE.sqlite generada con exito");
 Console.ReadKey();

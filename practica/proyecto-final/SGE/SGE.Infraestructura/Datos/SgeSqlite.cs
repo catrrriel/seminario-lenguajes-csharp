@@ -1,9 +1,10 @@
+using SGE.Aplicacion.Autorizacion;
 using SGE.Dominio.Usuarios;
 
 namespace SGE.Infraestructura.Datos;
 public class SgeSqlite
 {
-    public static void Inicializar(SgeContext context)
+    public static void Inicializar(SgeContext context, IHashService hashService)
     {
         // Verificar si la db ya existe, crearla si hace falta
         // EnsureCreated devuelve true solo la primera vez que crea la base de datos
@@ -13,7 +14,7 @@ public class SgeSqlite
             context.Usuarios.Add(new Usuario(
                     nombre: "Admin",
                     email: DireccionEmail.Parse("admin@sge.com"),
-                    contraseñaPlana: "admin123",
+                    contraseñaHash: hashService.ObtenerHash("admin123"),
                     esAdministrador: true
             ));
 
@@ -21,13 +22,13 @@ public class SgeSqlite
             context.Usuarios.Add(new Usuario(
                     nombre: "UsuarioConPermiso",
                     email: DireccionEmail.Parse("prueba1@sge.com"),
-                    contraseñaPlana: "prueba123"
+                    contraseñaHash: hashService.ObtenerHash("prueba123")
             ));
             // Usuario prueba sin permisos
             context.Usuarios.Add(new Usuario(
                     nombre: "UsuarioSinPermiso",
                     email: DireccionEmail.Parse("prueba2@sge.com"),
-                    contraseñaPlana: "prueba123"
+                    contraseñaHash: hashService.ObtenerHash("prueba123")
             ));
 
             context.SaveChanges();

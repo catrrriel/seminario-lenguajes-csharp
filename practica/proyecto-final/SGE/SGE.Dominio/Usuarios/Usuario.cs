@@ -10,7 +10,7 @@ public class Usuario : Entidad
     public string ContrasenaHash { get; private set; } = "";
     public bool EsAdministrador { get; private set; }
 
-    // Para encapsular mejor. public readonly solo protege la referencia, no impide que modifiquen los datos de adentro
+    // Para encapsular mejor. private readonly solo protege la referencia, no impide que modifiquen los datos de adentro
     private List<Permiso> _permisos = new List<Permiso>();
     public IReadOnlyCollection<Permiso> Permisos => _permisos.AsReadOnly();
 
