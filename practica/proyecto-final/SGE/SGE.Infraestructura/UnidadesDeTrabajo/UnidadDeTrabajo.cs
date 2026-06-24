@@ -1,7 +1,7 @@
 using SGE.Aplicacion.Abstracciones;
 using SGE.Infraestructura.Datos;
 
-namespace SGE.Infraestructura.UnidadDeTrabajo;
+namespace SGE.Infraestructura.UnidadesDeTrabajo;
 public class UnidadDeTrabajo : IUnidadDeTrabajo
 {
     private readonly SgeContext _context;

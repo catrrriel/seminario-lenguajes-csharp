@@ -5,6 +5,14 @@
     <ProjectReference Include="..\SGE.Infraestructura\SGE.Infraestructura.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SGE.Dominio\SGE.Dominio.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>

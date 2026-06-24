@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SGE.Aplicacion.Autorizacion;
 using SGE.Dominio.Usuarios;
 
@@ -10,6 +11,15 @@ public class SgeSqlite
         // EnsureCreated devuelve true solo la primera vez que crea la base de datos
         if (context.Database.EnsureCreated())
         {
+            // Journal mode
+            var connection = context.Database.GetDbConnection();
+            connection.Open();
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "PRAGMA journal_mode=DELETE;";
+                command.ExecuteNonQuery();
+            }
+
             // Admin semilla
             context.Usuarios.Add(new Usuario(
                     nombre: "Admin",

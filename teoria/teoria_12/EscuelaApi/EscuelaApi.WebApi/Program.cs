@@ -19,16 +19,15 @@ builder.Services.AddDbContext<EscuelaContext>(opciones =>
 // ¡ATENCIÓN! El ciclo de vida 'Scoped' es vital aquí.
 // Garantiza que la Unidad de Trabajo y los Repositorios compartan 
 // exactamente la misma transacción en memoria durante cada petición HTTP.
-builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 builder.Services.AddScoped<IAlumnoRepository, AlumnoRepository>();
 builder.Services.AddScoped<IExamenRepository, ExamenRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 
 // C. Seguridad (Autorización)
 // El servicio de autorización, como usa el DbContext, debe ser Scoped 
 // (tiene una dependencia con EscuelaContext)
 builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
-
 
 // D. Casos de Uso
 builder.Services.AddScoped<AgregarAlumnoUseCase>();
