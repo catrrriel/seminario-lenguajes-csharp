@@ -3,12 +3,15 @@ using SGE.Aplicacion.Extensiones;
 using SGE.Dominio.Comun;
 using SGE.Infraestructura.Datos;
 using SGE.Infraestructura.Extensiones;
+using SGE.WebApi.Endpoints;
 using SGE.WebApi.ManejadorDeExcepciones;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // CONFIGURACION DE SERVICIOS (Contenedor DI)
-
+// Open Api
+builder.Services.AddOpenApi();
 // DB, Repositorios, UOW, servicios de seguridad
 builder.Services.AddInfraestructura(builder.Configuration);
 // Casos de uso
@@ -20,6 +23,13 @@ builder.Services.AddExceptionHandler<ManejadorDeExcepcionesGlobales>();
 
 // Constuimos la aplicacion y cerramos la fase de configuracion
 var app = builder.Build();
+
+// Solo exponemos esto en modo desarrollo
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi(); // Genera el archivo JSON interno
+    app.MapScalarApiReference(); // Levanta la interfaz grafica en /scalar
+}
 
 // Middleware al principio del pipeline
 app.UseExceptionHandler();
@@ -39,6 +49,9 @@ using (var scope = app.Services.CreateScope())
 
 // ENDPOINTS
 app.MapGet("/", () => "La API de Sge esta funcionando");
+
+app.MapExpedientesEndpoints();
+app.MapTramitesEndpoints();
 
 app.MapGet("/api/prueba-error", () => 
 {

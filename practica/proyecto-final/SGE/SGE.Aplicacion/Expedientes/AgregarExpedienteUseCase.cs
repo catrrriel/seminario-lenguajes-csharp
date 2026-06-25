@@ -11,15 +11,15 @@ public class AgregarExpedienteUseCase(IExpedienteRepository repositorio, IAutori
     private readonly IAutorizacionService _autorizacion = autorizacion;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public AgregarExpedienteResponse Ejecutar(AgregarExpedienteRequest request)
+    public AgregarExpedienteResponse Ejecutar(AgregarExpedienteRequest request, Guid idUsuario)
     {
         // Verificar permiso
-        if (!_autorizacion.PoseeElPermiso(request.IdUsuario, Permiso.ExpedienteAlta))
+        if (!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
             throw new AutorizacionException("El usuario no tiene permiso para crear expedientes.");
 
         // Construir value object  e instanciar entidad desde los datos planos del request
         var caratula = new CaratulaExpediente(request.Caratula);
-        var expediente = new Expediente(caratula, request.IdUsuario);
+        var expediente = new Expediente(caratula, idUsuario);
 
         // Persistir
         _repositorio.Agregar(expediente);

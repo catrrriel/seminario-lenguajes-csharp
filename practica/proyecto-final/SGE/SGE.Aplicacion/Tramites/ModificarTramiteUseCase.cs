@@ -12,19 +12,20 @@ public class ModificarTramiteUseCase(ITramiteRepository repositorio, IAutorizaci
     private readonly IAutorizacionService _autorizacion = autorizacion;
     private readonly ActualizacionEstadoExpedienteService _actualizacionEstado = actualizacionEstado;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
-    public ModificarTramiteResponse Ejecutar(ModificarTramiteRequest request)
+    public ModificarTramiteResponse Ejecutar(ModificarTramiteRequest request, Guid idUsuario)
     {
-        if(!_autorizacion.PoseeElPermiso(request.IdUsuario, Permiso.TramiteModificacion))
+        if(!_autorizacion.PoseeElPermiso(idUsuario, Permiso.TramiteModificacion))
             throw new AutorizacionException("El usuario no tiene permiso para modificar tramites");
         
         var tramite = _repositorio.ObtenerPorId(request.Id)
             ?? throw new EntidadNoEncontradaException("El tramite no existe en el repositorio");
         
         var nuevoContenido = new ContenidoTramite(request.NuevoContenido);
-        tramite.ModificarContenido(nuevoContenido, request.IdUsuario);
-        tramite.CambiarEtiqueta(request.NuevaEtiqueta, request.IdUsuario);
+        tramite.ModificarContenido(nuevoContenido, idUsuario);
+        tramite.CambiarEtiqueta(request.NuevaEtiqueta, idUsuario);
 
-        _actualizacionEstado.Ejecutar(tramite.ExpedienteId, request.IdUsuario);
+        _unidadDeTrabajo.GuardarCambios();
+        _actualizacionEstado.Ejecutar(tramite.ExpedienteId, idUsuario);
         _unidadDeTrabajo.GuardarCambios();
         return new ModificarTramiteResponse(tramite.Id, tramite.Etiqueta, tramite.Contenido.Valor);
     }

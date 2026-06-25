@@ -13,9 +13,9 @@ public class EliminarExpedienteUseCase(IExpedienteRepository expedienteRepositor
     private readonly IAutorizacionService _autorizacion = autorizacion;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public EliminarExpedienteResponse Ejecutar(EliminarExpedienteRequest request)
+    public EliminarExpedienteResponse Ejecutar(EliminarExpedienteRequest request, Guid idUsuario)
     {
-        if(!_autorizacion.PoseeElPermiso(request.IdUsuario, Permiso.ExpedienteBaja))
+        if(!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja))
             throw new AutorizacionException("El usuario no tiene permiso para eliminar expedientes");
         
         var expediente = _expedienteRepositorio.ObtenerPorId(request.Id)

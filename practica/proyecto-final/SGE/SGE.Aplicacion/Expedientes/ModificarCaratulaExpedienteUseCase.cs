@@ -12,16 +12,16 @@ public class ModificarCaratulaExpedienteUseCase(IExpedienteRepository repositori
     private readonly IAutorizacionService _autorizacion = autorizacion;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public ModificarCaratulaExpedienteResponse Ejecutar(ModificarCaratulaExpedienteRequest request)
+    public ModificarCaratulaExpedienteResponse Ejecutar(ModificarCaratulaExpedienteRequest request, Guid idUsuario)
     {
-        if(!_autorizacion.PoseeElPermiso(request.IdUsuario, Permiso.ExpedienteModificacion))
+        if(!_autorizacion.PoseeElPermiso(idUsuario, Permiso.ExpedienteModificacion))
             throw new AutorizacionException("El usuario no tiene permiso para modificar expedientes.");
         
         var expediente = _repositorio.ObtenerPorId(request.Id)
             ?? throw new EntidadNoEncontradaException("El expediente no existe en el repositorio.");
         
         var nuevaCaratula = new CaratulaExpediente(request.NuevaCaratula);
-        expediente.ModificarCaratula(nuevaCaratula, request.IdUsuario);
+        expediente.ModificarCaratula(nuevaCaratula, idUsuario);
 
         _unidadDeTrabajo.GuardarCambios();
         return new ModificarCaratulaExpedienteResponse(expediente.Id, expediente.Caratula.Valor);

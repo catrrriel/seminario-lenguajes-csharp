@@ -4,13 +4,18 @@ public class ListarExpedientesUseCase(IExpedienteRepository repositorio)
 {
     private readonly IExpedienteRepository _repositorio = repositorio;
 
-    public IEnumerable<ExpedienteResponse> Ejecutar(ListarExpedientesRequest request)
+    public ListarExpedientesResponse Ejecutar(ListarExpedientesRequest request)
     {
-        var res = new List<ExpedienteResponse>();
-        foreach (var e in _repositorio.ObtenerTodos())
-        {
-            res.Add(new ExpedienteResponse(e.Id, e.Caratula.Valor, e.Estado, e.FechaCreacion, e.FechaUltimaModificacion));
-        }
-        return res;
+        var expedientes = _repositorio.ObtenerTodos();
+        
+        var dtos = expedientes.Select(e => new ExpedienteDto(
+            e.Id,
+            e.Caratula.Valor,
+            e.Estado,
+            e.FechaCreacion,
+            e.FechaUltimaModificacion
+        ));
+
+        return new ListarExpedientesResponse(dtos);
     }
 }

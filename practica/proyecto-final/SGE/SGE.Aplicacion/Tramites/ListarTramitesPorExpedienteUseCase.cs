@@ -4,15 +4,18 @@ public class ListarTramitesPorExpedienteUseCase(ITramiteRepository repositorio)
 {
     private readonly ITramiteRepository _repositorio = repositorio;
 
-    public IEnumerable<TramiteResponse> Ejecutar(ListarTramitesPorExpedienteRequest request)
+    public ListarTramitesPorExpedienteResponse Ejecutar(ListarTramitesPorExpedienteRequest request)
     {
-        return _repositorio.ObtenerPorExpedienteId(request.ExpedienteId)
-            .Select(t => new TramiteResponse(
-                t.Id,
-                t.ExpedienteId,
-                t.Etiqueta,
-                t.Contenido.Valor,
-                t.FechaCreacion
-            ));
+        var tramites = _repositorio.ObtenerPorExpedienteId(request.ExpedienteId);
+
+        var dtos = tramites.Select(t => new TramiteDto(
+            t.Id,
+            t.ExpedienteId,
+            t.Etiqueta,
+            t.Contenido.Valor,
+            t.FechaCreacion
+        ));
+
+        return new ListarTramitesPorExpedienteResponse(dtos);
     }
 }
