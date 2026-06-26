@@ -33,16 +33,21 @@ public class Usuario : Entidad
     }
 
     // Metodos para gestionar permisos de forma segura
-    public void AsignarPermiso(Permiso permiso)
+    // public void AsignarPermiso(Permiso permiso)
+    // {
+    //     if (!_permisos.Contains(permiso))
+    //     {
+    //         _permisos.Add(permiso);
+    //     }
+    // }
+    // public void RemoverPermiso(Permiso permiso)
+    // {
+    //     _permisos.Remove(permiso);
+    // }
+
+    public void ReemplazarPermisos(IEnumerable<Permiso> nuevosPermisos)
     {
-        if (!_permisos.Contains(permiso))
-        {
-            _permisos.Add(permiso);
-        }
-    }
-    public void RemoverPermiso(Permiso permiso)
-    {
-        _permisos.Remove(permiso);
+        _permisos = nuevosPermisos.ToList();
     }
 
     // Metodo para que el usuario pueda modificar sus datos basicos  <= DUDA

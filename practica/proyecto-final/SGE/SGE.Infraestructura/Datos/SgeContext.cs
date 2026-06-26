@@ -16,9 +16,10 @@ public class SgeContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<Expediente>().ComplexProperty(e => e.Caratula);
         modelBuilder.Entity<Tramite>().ComplexProperty(t => t.Contenido);
         modelBuilder.Entity<Usuario>().ComplexProperty(u => u.Email);
+        modelBuilder.Entity<Usuario>().Property(u => u.Permisos).HasField("_permisos");
     }
 }

@@ -3,11 +3,12 @@ using SGE.Aplicacion.Expedientes;
 using SGE.Aplicacion.Tramites;
 using SGE.Aplicacion.Usuarios;
 namespace SGE.Aplicacion.Extensiones;
-public static class Extensiones
+public static class ExtensionesAplicacion
 {
-    public static IServiceCollection AddAplication(this IServiceCollection servicios)
+    public static IServiceCollection AddAplicacion(this IServiceCollection servicios)
     {
         // Casos de uso de Usuario
+        servicios.AddScoped<LoginUseCase>();
         servicios.AddScoped<RegistrarUsuarioUseCase>();
         servicios.AddScoped<EliminarUsuarioUseCase>();
         servicios.AddScoped<ModificarMisDatosUseCase>();

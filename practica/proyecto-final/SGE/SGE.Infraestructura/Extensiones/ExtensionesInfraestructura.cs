@@ -14,7 +14,7 @@ using SGE.Infraestructura.Datos;
 using Microsoft.EntityFrameworkCore;
 
 namespace SGE.Infraestructura.Extensiones;
-public static class Extensiones
+public static class ExtensionesInfraestructura
 {
     public static IServiceCollection AddInfraestructura(this IServiceCollection servicios, IConfiguration configuration)
     {

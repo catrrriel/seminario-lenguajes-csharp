@@ -8,9 +8,9 @@ public class EliminarUsuarioUseCase(IUsuarioRepository repositorio, IUnidadDeTra
     private readonly IUsuarioRepository _repositorio = repositorio;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public EliminarUsuarioResponse Ejecutar(EliminarUsuarioRequest request)
+    public EliminarUsuarioResponse Ejecutar(EliminarUsuarioRequest request, Guid idUsuario)
     {
-        var usuarioEjecutor = _repositorio.ObtenerPorId(request.IdUsuarioEjecutor) ??
+        var usuarioEjecutor = _repositorio.ObtenerPorId(idUsuario) ??
             throw new EntidadNoEncontradaException("El usuario ejecutor no existe");
         if (!usuarioEjecutor.EsAdministrador)
             throw new AutorizacionException("El usuario ejecutor no es administrados.");

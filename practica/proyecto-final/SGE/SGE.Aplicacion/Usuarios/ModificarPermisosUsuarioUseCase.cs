@@ -8,30 +8,31 @@ public class ModificarPermisosUsuarioUseCase(IUsuarioRepository repositorio, IUn
     private readonly IUsuarioRepository _repositorio = repositorio;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public ModificarPermisosUsuarioResponse Ejecutar (ModificarPermisosUsuarioRequest request)
+    public ModificarPermisosUsuarioResponse Ejecutar (ModificarPermisosUsuarioRequest request, Guid idUsuarioAEliminar, Guid idUsuarioEjecutor)
     {
-        var usuarioEjecutor = _repositorio.ObtenerPorId(request.IdUsuarioEjecutor) ??
+        var usuarioEjecutor = _repositorio.ObtenerPorId(idUsuarioEjecutor) ??
             throw new EntidadNoEncontradaException("El usuario ejecutor no existe");
         if (!usuarioEjecutor.EsAdministrador)
             throw new AutorizacionException("El usuario ejecutor no es administrador.");
 
-        var usuarioAModificar = _repositorio.ObtenerPorId(request.IdUsuarioAModificar) ??
+        var usuarioAModificar = _repositorio.ObtenerPorId(idUsuarioAEliminar) ??
             throw new EntidadNoEncontradaException("El usuario a modificar no existe");
         
         // No se puede modificar una coleccion mientras la estas recorriendo
         // por eso ToList() nos permite ir recorriendo una copia de los permisos.
         // Entonces podemos eliminar elementos de la lista original sin romper el programa.
-        foreach (var permiso in usuarioAModificar.Permisos.ToList())
-        {
-            if(!request.Permisos.Contains(permiso))   // Si el actual no esta en la nueva lista que mando el admin
-                usuarioAModificar.RemoverPermiso(permiso);
-        }
+        // foreach (var permiso in usuarioAModificar.Permisos.ToList())
+        // {
+        //     if(!request.Permisos.Contains(permiso))   // Si el actual no esta en la nueva lista que mando el admin
+        //         usuarioAModificar.RemoverPermiso(permiso);
+        // }
 
         // Para asignar nuevos permisos
-        foreach (var permiso in request.Permisos)
-        {
-            usuarioAModificar.AsignarPermiso(permiso);
-        }
+        // foreach (var permiso in request.Permisos)
+        // {
+        //     usuarioAModificar.AsignarPermiso(permiso);
+        // }
+        usuarioAModificar.ReemplazarPermisos(request.Permisos);
 
         _unidadDeTrabajo.GuardarCambios();
         return new ModificarPermisosUsuarioResponse(usuarioAModificar.Id);

@@ -10,10 +10,10 @@ public class ModificarMisDatosUseCase(IUsuarioRepository repositorio, IHashServi
     private readonly IHashService _hashService = hashService;
     private readonly IUnidadDeTrabajo _unidadDeTrabajo = unidadDeTrabajo;
 
-    public ModificarMisDatosResponse Ejecutar(ModificarMisDatosRequest request)
+    public ModificarMisDatosResponse Ejecutar(ModificarMisDatosRequest request, Guid idUsuario)
     {
         // Buscar usuario por la Id extraida del token
-        var usuario = _repositorio.ObtenerPorId(request.Id) ??
+        var usuario = _repositorio.ObtenerPorId(idUsuario) ??
             throw new EntidadNoEncontradaException("El usuario no existe.");
         
         // Actualizar datos
