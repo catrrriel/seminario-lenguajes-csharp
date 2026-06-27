@@ -146,14 +146,10 @@
 
 ## Caminos de Error
 
-### Error de Dominio — Carátula vacía
+### Error de Dominio (400 Bad Request)  — Carátula vacía
 
----
+### Error de Autorización (403 Forbidden) — Usuario sin permisos
 
-### Error de Autorización — Usuario sin permisos
+### Error de Repositorio (404 Not Found) — Entidad no encontrada
 
----
-
-### Error de Repositorio — Entidad no encontrada
-
----
+### Error de Autenticación (401 Unauthorized) — Falta de Token
