@@ -20,6 +20,7 @@ public static class ExtensionesAplicacion
         servicios.AddScoped<EliminarExpedienteUseCase>();
         servicios.AddScoped<CambiarEstadoExpedienteUseCase>();
         servicios.AddScoped<ListarExpedientesUseCase>();
+        servicios.AddScoped<ObtenerDetalleExpedienteUseCase>();
         servicios.AddScoped<ModificarCaratulaExpedienteUseCase>();
         
         // Tramite

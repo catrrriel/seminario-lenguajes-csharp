@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using SGE.Aplicacion.Expedientes;
 using SGE.Aplicacion.Tramites;
 using System.Security.Claims;
@@ -80,6 +77,17 @@ public static class ExpedientesEndpoints
             return Results.Ok(response);
         }).RequireAuthorization();
 
+        // OBTENER DETALLE EXPEDIENTE
+        expedientesApi.MapGet("/{id:guid}", (
+            Guid id, 
+            ObtenerDetalleExpedienteUseCase useCase) =>
+        {
+            var request = new ObtenerDetalleExpedienteRequest(id);
+            var response = useCase.Ejecutar(request);
+
+            return Results.Ok(response);
+        }).RequireAuthorization();
+
         // LISTAR
         expedientesApi.MapGet("/", (ListarExpedientesUseCase useCase) =>
         {
@@ -88,7 +96,7 @@ public static class ExpedientesEndpoints
 
             // HTTP 200 con el JSON de expedientes
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
 
         // LISTAR TRAMITES POR EXPEDIENTE
         expedientesApi.MapGet("/{id:guid}/tramites", (
@@ -99,6 +107,6 @@ public static class ExpedientesEndpoints
             var response = useCase.Ejecutar(request);
 
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
     }
 }

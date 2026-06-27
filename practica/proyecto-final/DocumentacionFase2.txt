@@ -1,0 +1,71 @@
+# SGE - Sistema de Gestión de Expedientes
+## Documentación de Pruebas Web API y Scalar
+
+---
+
+## Aumnos participantes
++ Paz, Amilcar Catriel - 24232/7
++ Rebollo, Lautaro - 25880/0
+
+---
+
+## Cómo ejecutar y probar el proyecto
+
+1. Levantar el proyecto asegurándose que el proyecto `SGE.WebApi` es el de inicio.
+2. Ingresar a `http://localhost/<puerto>/scalar`
+
+---
+
+## Credenciales de prueba
+
+* **Admin principal:** `admin@sge.com` | Clave: `admin123` | EsAdministrador: `true`
+* **Usuario con permisos:** `prueba1@sge.com` | Clave: `prueba123` | EsAdministrador: `false`
+* **Usuario sin permisos:** `prueba2@sge.com` | Clave: `prueba123` | EsAdministrador: `false`
+
+---
+
+## Camino Feliz — Flujo principal
+
+### Paso 1: Autenticación
+* Endpoint: `POST /api/login`
+* Acción: Ingresar las credenciales del administrador, ejecutar y copiar el Token de la respuesta. Para posteriormente agregarlo al header Authorization y asi habiliar los endpoints protegidos.
+
+### Paso 2: Crear un Expediente
+* Endpoint: `POST /api/expedientes`
+* Acción: Enviar un JSON con una carátula válida (string). Devuelve HTTP 200 OK y el ID del Expediente dado de alta con el estado inicializado en `RecienIniciado = 0`.
+
+### Paso 3: Agregar un Trámite
+* Endpoint: `POST /api/tramites`
+* Acción: Asociar un trámite al expediente creado, por ejemplo, con etiqueta `Resolucion = 4`
+
+### Paso 4: Verificar cambio de estado automático
+* Endpoint: `GET /api/expedientes`
+* Acción: Comprobar que el estado del expediente cambio de `RecienIniciado = 0` a `ConResolucion = 2`.
+
+### Paso 5: Obtener los usuarios registrados
+* Endpoint: `GET /api/usuarios`
+* Acción: Ejecutar la petición asegurándose que esté el header Authorization con el token válido. Copiar el ID del `UsuarioConPermiso` 
+
+### Paso 6: Modificar los permisos de un usuario
+* Endpoint: `PUT api/usuarios/{id}/permisos`
+* Acción: Pegar el ID como parámetro y enviar un JSON con los valores de los permisos que se quieran añadir:
+
+| Permisos  | Valores numéricos |
+| ------------- |:-------------:|
+| ExpedienteAlta | 0 |
+| ExpedienteBaja | 1 |
+| ExpedienteModificacion | 2 |
+| TramiteAlta | 3 |
+| TramiteBaja | 4 |
+| TramiteModificacion | 5 |
+
+> Después de agregar algunos permisos también probar que los permisos que no integren el JSON son eliminados de los permisos ya otorgados.
+
+## Camino Feliz 2 — Operar con Usuario autorizado
+ 
+### Paso 1: Autenticación
+* Endpoint: `POST /api/login`
+* Acción: Ingresar las credenciales de `prueba1@sge.com`, ejecutar y reemplazar el Token en el header. Para posteriormente agregarlo al header Authorization y asi habiliar los endpoints protegidos.
+
+### Paso 2: Modificar Expediente
+* Endpoint: ´PUT /api/expedientes/{id}´

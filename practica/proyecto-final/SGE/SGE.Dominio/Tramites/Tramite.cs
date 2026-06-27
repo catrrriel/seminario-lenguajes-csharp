@@ -15,7 +15,7 @@ public class Tramite : Entidad
     {
         if(expedienteId == Guid.Empty)
             throw new DominioException("El id del expediente no puede estar vacio.");
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid();    
         ExpedienteId = expedienteId;
         Etiqueta = etiqueta;
         FechaCreacion = DateTime.Now;

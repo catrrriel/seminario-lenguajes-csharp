@@ -16,6 +16,9 @@ public class AutorizacionService(IUsuarioRepository repositorio) : IAutorizacion
         if(usuario == null)
             return false;
         
+        if(usuario.EsAdministrador)
+            return true;
+
         // Si tiene ExpedienteBaja, por implicancia se otorga TramiteBaja
         if(permiso == Permiso.TramiteBaja && usuario.Permisos.Contains(Permiso.ExpedienteBaja))
             return true;

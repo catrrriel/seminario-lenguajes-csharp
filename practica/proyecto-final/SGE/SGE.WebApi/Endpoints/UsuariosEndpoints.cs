@@ -64,7 +64,7 @@ public static class UsuariosEndpoints
             var response = useCase.Ejecutar(request, idUsuario);
 
             return Results.Ok(response);
-        });
+        }).RequireAuthorization();
 
         // MODIFICAR PERMISOS
         usuariosApi.MapPut("/{id:guid}/permisos", (
