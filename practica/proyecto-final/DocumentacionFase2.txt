@@ -36,7 +36,7 @@
 
 ### Paso 3: Agregar un Trámite
 * Endpoint: `POST /api/tramites`
-* Acción: Asociar un trámite al expediente creado, por ejemplo, con etiqueta `Resolucion = 4`
+* Acción: Asociar al menos tres (para poder probar los endpoints `DELETE`) trámites al expediente creado, por ejemplo, con etiqueta `Resolucion = 4`
 
 ### Paso 4: Verificar cambio de estado automático
 * Endpoint: `GET /api/expedientes`
@@ -48,7 +48,7 @@
 
 ### Paso 6: Modificar los permisos de un usuario
 * Endpoint: `PUT api/usuarios/{id}/permisos`
-* Acción: Pegar el ID como parámetro y enviar un JSON con los valores de los permisos que se quieran añadir:
+* Acción: Pegar el ID como parámetro y enviar un JSON con los valores de los permisos que se quieran añadir, por ejemplo, ahora añadir modificación y baja de expedientes y trámites para probar dichas funcionalidades:
 
 | Permisos  | Valores numéricos |
 | ------------- |:-------------:|
@@ -61,11 +61,99 @@
 
 > Después de agregar algunos permisos también probar que los permisos que no integren el JSON son eliminados de los permisos ya otorgados.
 
+---
+
 ## Camino Feliz 2 — Operar con Usuario autorizado
  
 ### Paso 1: Autenticación
 * Endpoint: `POST /api/login`
 * Acción: Ingresar las credenciales de `prueba1@sge.com`, ejecutar y reemplazar el Token en el header. Para posteriormente agregarlo al header Authorization y asi habiliar los endpoints protegidos.
 
-### Paso 2: Modificar Expediente
-* Endpoint: ´PUT /api/expedientes/{id}´
+### Paso 2: Obtener detalle expediente
+* Endpoint: `GET /api/expedientes/{id}`
+* Acción: Copiar el ID del Expediente creado anteriormente y pegarlo en el parámetro de ruta para obtener el detalle del mismo y sus trámites asociados.
+
+### Paso 3: Modificar carátula del expediente
+* Endpoint: `PUT /api/expedientes/{id}/caratula`
+* Acción: Colocar el ID del expediente obtenido y pegarlo tanto en el parámetro de ruta como en el JSON junto con una nueva carátula (string). Recibimos HTTP 200 OK, y observamos que se impactaron los cambios.
+
+### Paso 4: Modificar estado del expediente
+* Endpoint: `PUT /api/expedientes/{id}/estado`
+* Acción: Copiar el ID del Expediente creado anteriormente y pegarlo tanto en el parámetro de ruta como en el JSON junto con un nuevo estado (valor númerico). Recibimos HTTP 200 OK, y observamos que se impactaron los cambios.
+
+| EstadoExpediente  | Valores numéricos |
+| ------------- |:-------------:|
+| RecienIniciado | 0 |
+| ParaResolver | 1 |
+| ConResolucion | 2 |
+| EnNotificacion | 3 |
+| Finalizado | 4 |
+
+### Paso 5: Listar trámites por expediente
+* Endpoint: `GET /api/expedientes/{id}/tramites`
+* Acción: Pegar el ID del expediente que venimos manejando en el parámetro de ruta y copiar el ID del Trámite que recibimos.
+
+### Paso 6: Modificar trámite
+* Endpoint: `PUT /api/tramites/{id}`
+* Acción: Pegar el ID del trámite tanto en el parámetro de ruta como en el body del JSON, junto con una nueva etiqueta (valor númerico) y un nuevo contenido (string) si se quiere, para hacer la petición. Recibimos HTTP 200 OK, y observamos que se impactaron los cambios.
+
+| EtiquetaTramite  | Valores numéricos |
+| ------------- |:-------------:|
+| EscritoAPresentado | 0 |
+| PaseAEstudio | 1 |
+| Despacho | 2 |
+| Resolucion | 3 |
+| Notificacion | 4 |
+| PaseAlArchivo | 5 |
+
+### Paso 7: Eliminar un trámite individual
+* Endpoint: `DELETE /api/tramites/{id}`
+* Acción: Colocar el ID del trámite que se desee eliminar y observar que al ejecutar recibimos HTTP 204 No Content. Corroborar que si los trámites tienen etiquetas distintas, y eliminamos el último trámite realizado, el estado del expediente se actualiza automáticamente.
+
+### Paso 8: Eliminar expediente y trámites en cascada
+* Endpoint: `DELETE /api/expedientes/{id}`
+* Acción: Volvemos a copiar el ID del expediente que veníamos manejando y lo colocamos en el parámetro de ruta. Ejecutamos y recibimos HTTP 204 No Content. Observar que se eliminó tanto el expediente como los trámites asociados. 
+
+---
+
+## Camino feliz 3 - Gestión de usuarios
+
+### Paso 1: Registrar un nuevo usuario
+* Endpoint: `POST /api/usuarios`
+* Acción: Armar el Body con nombre (string), email (string) y contraseña (string), y ejecutar. Recibimos HTTP 201 Created.
+
+### Paso 2: Iniciar sesión con el nuevo usuario
+* Endpoint: `POST /api/login`
+* Acción: Ingresar las credenciales del nuevo usuario y copiar el token recibido para autorizar el siguente paso.
+
+### Paso 3: Modificar datos del usuario logueado
+* Endpoint: `PUT /api/usuarios/me`
+* Acción: Asegurarse de pegar el token obtenido en el header, ya que el ID del usuario a modificar se extrae de ahí. Armar el Body con un nuevo nombre, un nuevo email y una nueva contraseña si se desea. Observar que impactaron los cambios.
+
+### Paso 4: Loguear al administrador
+* Endpoint: `POST /api/login`
+* Acción: Ingresar credenciales de `admin@sge.com` para probar el siguiente endpoint y copiar el token.
+
+### Paso 5: Listar usuarios
+* Endpoint: `GET /api/usuarios`
+* Acción: Colocar el token en el header y ejecutar para obtener el listado de usuarios. Copiar el ID del usuario que deseemos eliminar.
+
+### Paso 6: Eliminar un usuario
+* Endpoint: `DELETE /api/usuarios/{id}`
+* Acción: Autorizar con el token en el header y pegar en el parámetro de ruta el ID del usuario a eliminar. Obtenemos HTTP 204 No Content y observamos los cambios impactados.
+
+---
+
+## Caminos de Error
+
+### Error de Dominio — Carátula vacía
+
+---
+
+### Error de Autorización — Usuario sin permisos
+
+---
+
+### Error de Repositorio — Entidad no encontrada
+
+---
